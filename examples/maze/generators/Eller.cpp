@@ -19,7 +19,10 @@ bool Eller::Step(World* w)
     {
         if (currentColumn <= (w->GetSize() - 1) / 2) 
         {
-            w->SetNodeColor(Point2D(currentColumn + 1, currentRow), Color::Red.Dark());
+          if (currentColumn != (w->GetSize() - 1) / 2) 
+          {
+            w->SetNodeColor(Point2D(currentColumn + 1, currentRow),Color::Red.Dark());
+          }
             currentRowSet[currentColumn + (w->GetSize() - 1) / 2].push(Point2D(currentColumn, currentRow));
             if (currentRow != -(w->GetSize() - 1) / 2)
             {

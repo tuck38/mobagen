@@ -42,9 +42,9 @@ void HuntandKill::Clear(World* world)
 
 Point2D HuntandKill::Hunt(World* w) 
 {
-  for (int i = max.x; i <= min.x; i++) 
+  for (int i = max.y; i <= min.y; i++) 
   {
-    for (int k = max.y; k <= min.y; k++) 
+    for (int k = max.x; k <= min.y; k++) 
     {
       if (w->GetNorth(Point2D(i, k)) && w->GetEast(Point2D(i, k)) 
       && w->GetSouth(Point2D(i, k)) && w->GetWest(Point2D(i, k)))
@@ -63,29 +63,33 @@ bool HuntandKill::Walk(World* w)
   Point2D Visitable[4];
   int visitablePoints = 0;
 
-   if (w->GetNorth(Point2D(currentNode.x + 1, currentNode.y)) && w->GetEast(Point2D(currentNode.x + 1, currentNode.y)) 
-   && w->GetSouth(Point2D(currentNode.x + 1, currentNode.y)) && w->GetWest(Point2D(currentNode.x + 1, currentNode.y)) && currentNode.x != min.x)
+   if (currentNode.x != min.x && w->GetNorth(Point2D(currentNode.x + 1, currentNode.y)) &&
+      w->GetEast(Point2D(currentNode.x + 1, currentNode.y)) 
+   && w->GetSouth(Point2D(currentNode.x + 1, currentNode.y)) && w->GetWest(Point2D(currentNode.x + 1, currentNode.y)))
    {
      Visitable[visitablePoints] = Point2D(currentNode.x + 1, currentNode.y);
      visitablePoints++;
    }
 
-   if (w->GetNorth(Point2D(currentNode.x - 1, currentNode.y)) && w->GetEast(Point2D(currentNode.x - 1, currentNode.y)) 
-   && w->GetSouth(Point2D(currentNode.x - 1, currentNode.y)) && w->GetWest(Point2D(currentNode.x - 1, currentNode.y)) && currentNode.x != max.x)
+   if (currentNode.x != max.x && w->GetNorth(Point2D(currentNode.x - 1, currentNode.y)) &&
+       w->GetEast(Point2D(currentNode.x - 1, currentNode.y)) 
+   && w->GetSouth(Point2D(currentNode.x - 1, currentNode.y)) && w->GetWest(Point2D(currentNode.x - 1, currentNode.y)))
    {
      Visitable[visitablePoints] = Point2D(currentNode.x - 1, currentNode.y);
      visitablePoints++;
    }
 
-   if (w->GetNorth(Point2D(currentNode.x, currentNode.y + 1)) && w->GetEast(Point2D(currentNode.x, currentNode.y + 1)) 
-   && w->GetSouth(Point2D(currentNode.x, currentNode.y + 1)) && w->GetWest(Point2D(currentNode.x, currentNode.y + 1)) && currentNode.y != min.y)
+   if (currentNode.y != min.y && w->GetNorth(Point2D(currentNode.x, currentNode.y + 1)) &&
+       w->GetEast(Point2D(currentNode.x, currentNode.y + 1)) 
+   && w->GetSouth(Point2D(currentNode.x, currentNode.y + 1)) && w->GetWest(Point2D(currentNode.x, currentNode.y + 1)))
    {
      Visitable[visitablePoints] = Point2D(currentNode.x, currentNode.y + 1);
      visitablePoints++;
    }
 
-   if (w->GetNorth(Point2D(currentNode.x, currentNode.y - 1)) && w->GetEast(Point2D(currentNode.x, currentNode.y - 1)) 
-   && w->GetSouth(Point2D(currentNode.x, currentNode.y - 1)) && w->GetWest(Point2D(currentNode.x, currentNode.y - 1)) && currentNode.y != max.y)
+   if (currentNode.y != max.y && w->GetNorth(Point2D(currentNode.x, currentNode.y - 1)) &&
+       w->GetEast(Point2D(currentNode.x, currentNode.y - 1)) 
+   && w->GetSouth(Point2D(currentNode.x, currentNode.y - 1)) && w->GetWest(Point2D(currentNode.x, currentNode.y - 1)))
    {
      Visitable[visitablePoints] = Point2D(currentNode.x, currentNode.y - 1);
      visitablePoints++;

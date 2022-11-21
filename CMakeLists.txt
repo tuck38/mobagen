@@ -131,4 +131,3 @@ add_subdirectory(examples)
 #add_library(main SHARED main.cpp)
 #target_sources(main PRIVATE main.cpp)
 #target_link_libraries(main SDL2 ${SDL2_LIBRARY})
-
