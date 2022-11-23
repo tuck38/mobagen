@@ -13,6 +13,17 @@ class Manager: public GameObject {
   SDL_Texture *texture;
   bool isSimulating = false;
 
+  //Tuck variables
+
+  float waterLevel = 0.5;
+  float sandLevel = 0.75;
+  float grassLevel = 0.8;
+  float mountainLevel = 0.9;
+
+  int villageSpawnRate = 50;
+
+  //Tuck variables
+
   std::vector<ScenarioGeneratorBase*> generators;
   int generatorId=0;
 

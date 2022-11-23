@@ -3,7 +3,7 @@
 #include "../PerlinNoise.hpp"
 #include <iostream>
 // do not use this one to your assignment. this is my sample generator
-std::vector<Color32> RandomScenarioGenerator::Generate(int sideSize, float displacement) {
+std::vector<Color32> RandomScenarioGenerator::Generate(float waterLevel, float sandLevel, float grassLevel, float mountainLevel, int villageRate, int sideSize, float displacement) {
   std::vector<Color32> colors;
 //   create your own function for noise generation
   siv::BasicPerlinNoise<float> noise;

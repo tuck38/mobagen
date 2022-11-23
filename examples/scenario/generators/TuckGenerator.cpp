@@ -2,43 +2,78 @@
 #include "../PerlinNoise.hpp"
 #include "TuckGenerator.h"
 #include <iostream>
-std::vector<Color32> TuckGenerator::Generate(int sideSize, float displacement) {
-  std::vector<Color32> colors;
-  //   create your own function for noise generation
-  siv::BasicPerlinNoise<float> noise;
-  srand(time(NULL));
-  noise.reseed(1337);
-  //Noise noise(1337, 1024,0,255);
-  for (int l = 0; l < sideSize; l++) {
-    for (int c = 0; c < sideSize; c++) {
-      float rgb = abs(noise.octave3D(c / 50.0, l / 50.0, displacement, 2) * 255);
+std::vector<Color32> TuckGenerator::Generate(float water, float sand, float grass, float mountain, int village, int sideSize, float displacement) 
+{
+  waterLevel = water;
+  sandLevel = sand;
+  grassLevel = grass;
+  mountainLevel = mountain;
+  villageSpawnRate = village;
 
-      colors.emplace_back(terrainType(rgb));
-      //double color = noise.noise2D(c/50.0,l/50.0);
-      //colors.emplace_back(color,color,color);
+  srand(time(NULL));
+
+  std::vector<Color32> colors;
+  std::vector<float> heightMap;
+  siv::BasicPerlinNoise<float> noise;
+  noise.reseed(1337);
+  for (int l = 0; l < sideSize; l++) 
+  {
+    for (int c = 0; c < sideSize; c++) 
+    {
+      float height = ((noise.octave3D(c / 50.0, l / 50.0, displacement, 3, 0.5) + 1) / 2);
+
+      colors.emplace_back(terrainType(height));
     }
   }
-  std::cout << "tryna see smthn: " << std::endl;
   return colors;
 }
 std::string TuckGenerator::GetName() { return "Tuck"; }
 
-Color32 TuckGenerator::terrainType(float rgb) 
-{
-    if (rgb < waterLevel)
-    {
-        return Color32(rgb, rgb, rgb * 5);
+Color32 TuckGenerator::terrainType(float height) {
+  if (height <= waterLevel) 
+  {
+    return Color32(0, 0, height * 255);
+  } 
+  else if (height <= sandLevel) 
+  {
+    return Color32(height * 85.1, height * 69.8, height * 50.2);
+  } 
+  else if (height <= grassLevel) 
+  {
+    int doVillageSpawn;
+    if (villageSpawnRate != 0 && villageSpawnRate != 100) {
+      doVillageSpawn = rand() % villageSpawnRate;
     } 
-    else if (rgb < 75) 
+    else if (villageSpawnRate == 100) 
     {
-        return Color32(rgb * 7, rgb * 6, rgb * 5);
+      doVillageSpawn = 1;
     }
-    else if (rgb < grassLevel) 
+    else 
     {
-        return Color32(rgb, rgb * 5, rgb);
+      doVillageSpawn = 0;
+    }
+    if (doVillageSpawn == 0) 
+    {
+      return Color32(255, 0, 0);
     } 
     else 
     {
-        return Color32(rgb, rgb, rgb);
+      return Color32(height * 49.73, height * 78.02, height * 31.45);
     }
+  } 
+  else if (height <= mountainLevel) 
+  {
+    return Color32(height * 149, height * 141, height * 133);
+  } 
+  else 
+  {
+    // default to snowwy peaks
+    if (height >= 1) {
+      return Color32(255, 255, 255);
+    } 
+    else 
+    {
+      return Color32(height * 255, height * 255, height * 255);
+    }
+  }
 }

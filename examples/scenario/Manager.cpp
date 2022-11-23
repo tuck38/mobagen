@@ -72,19 +72,82 @@ void Manager::OnGui(ImGuiContext* context) {
   ImGui::SetCurrentContext(context);
   ImGui::Begin("Settings", nullptr);
   ImGui::Text("%.1fms %.0fFPS | AVG: %.2fms %.1fFPS",
-              ImGui::GetIO().DeltaTime * 1000,
-              1.0f / ImGui::GetIO().DeltaTime,
-              1000.0f / ImGui::GetIO().Framerate,
-              ImGui::GetIO().Framerate);
+              ImGui::GetIO().DeltaTime * 1000, 1.0f / ImGui::GetIO().DeltaTime,
+              1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
   static auto newSize = sideSize;
 
-  if(ImGui::SliderInt("Side Size", &newSize, 5, 2048)) {
-    //newSize = (newSize/4)*4 + 1;
-    if(newSize!=sideSize) {
+  if (ImGui::SliderInt("Side Size", &newSize, 5, 2048)) {
+    // newSize = (newSize/4)*4 + 1;
+    if (newSize != sideSize) {
       sideSize = newSize;
       Clear();
     }
   }
+
+  static int newWaterLevel = waterLevel * 100;
+
+  // TUCK CODE
+
+  if (ImGui::SliderInt("Water Level", &newWaterLevel, 0, 100)) 
+  {
+    { if (newWaterLevel != waterLevel * 100) {
+        waterLevel = newWaterLevel;
+        waterLevel = waterLevel / 100;
+        Clear();
+      }
+    }
+  }
+
+    static int newSandLevel = sandLevel * 100;
+
+  if (ImGui::SliderInt("Sand Level", &newSandLevel, 0, 100)) 
+  {
+    { if (newSandLevel != sandLevel * 100) {
+        sandLevel = newSandLevel;
+        sandLevel = sandLevel / 100;
+        Clear();
+      }
+    }
+  }
+
+  static int newGrassLevel = grassLevel * 100;
+
+    if (ImGui::SliderInt("grass Level", &newGrassLevel, 0, 100)) {
+    {
+      if (newGrassLevel != grassLevel * 100) {
+        grassLevel = newGrassLevel;
+        grassLevel = grassLevel / 100;
+        Clear();
+      }
+    }
+  }
+
+
+  static int newMountainLevel = mountainLevel * 100;
+
+  if (ImGui::SliderInt("mountain Level", &newMountainLevel, 0, 100)) {
+    {
+      if (newMountainLevel != mountainLevel * 100) {
+        mountainLevel = newMountainLevel;
+        mountainLevel = mountainLevel / 100;
+        Clear();
+      }
+    }
+  }
+
+  static int newVillageRate = villageSpawnRate;
+
+    if (ImGui::SliderInt("village spawn", &newVillageRate, 0, 100)) {
+    {
+      if (newVillageRate != 100 - villageSpawnRate) {
+        villageSpawnRate = 100 - newVillageRate;
+        Clear();
+      }
+    }
+  }
+
+  //TUCK CODE
+
 
   ImGui::Text("Generator: %s", generators[generatorId]->GetName().c_str());
   if (ImGui::BeginCombo("##combo", generators[generatorId]->GetName().c_str())) // The second parameter is the label previewed before opening the combo.
@@ -140,7 +203,7 @@ int Manager::GetSize() const {
 }
 void Manager::step() {
   auto start = std::chrono::high_resolution_clock::now();
-  auto pixels = generators[generatorId]->Generate(sideSize, accumulatedTime);
+  auto pixels = generators[generatorId]->Generate(waterLevel, sandLevel, grassLevel, mountainLevel, villageSpawnRate, sideSize, accumulatedTime);
   auto step = std::chrono::high_resolution_clock::now();
   SetPixels(pixels);
   auto end = std::chrono::high_resolution_clock::now();
